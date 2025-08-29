@@ -2,17 +2,11 @@ from django.urls import path, include
 from . import views
 from .views import api_router, notifications, mark_notification_read, CustomerLoginView, customer_dashboard, customer_invoice_pdf, order_qrcode, inventory_qrcode, orders_calendar, orders_ical
 from rest_framework.authtoken.views import obtain_auth_token
-<<<<<<< HEAD
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('customers/export/', views.customers_export, name='customers_export'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-=======
-
-urlpatterns = [
-    path('customers/export/', views.customers_export, name='customers_export'),
->>>>>>> c423afddd282a4f6806259664fced3dc995bee88
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'), # Kept the logout route
     path('register/', views.register, name='register'),
     path('', views.home, name='home'),
     path('dashboard/', views.dashboard, name='dashboard'),
@@ -72,4 +66,4 @@ urlpatterns += [
     path('sample/orders.csv', views.sample_orders_csv, name='sample_orders_csv'),
     path('sample/requirements.csv', views.sample_requirements_csv, name='sample_requirements_csv'),
     path('sample/payments.csv', views.sample_payments_csv, name='sample_payments_csv'),
-] 
+]
