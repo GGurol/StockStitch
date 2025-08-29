@@ -1,0 +1,84 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% load json_script %}
+
+{% block title %}Analytics & Reports - StockStitch{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Analytics & Reports</h1>
+<div class="row">
+  <div class="col-md-6 mb-4">
+    <div class="card">
+      <div class="card-header">Orders Per Month</div>
+      <div class="card-body">
+        <canvas id="ordersChart"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 mb-4">
+    <div class="card">
+      <div class="card-header">Revenue Per Month</div>
+      <div class="card-body">
+        <canvas id="revenueChart"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 mb-4">
+    <div class="card">
+      <div class="card-header">Inventory Stock (Top 10)</div>
+      <div class="card-body">
+        <canvas id="stockChart"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 mb-4">
+    <div class="card">
+      <div class="card-header">Top Customers (by Orders)</div>
+      <div class="card-body">
+        <canvas id="customersChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Safely embed JSON data into the DOM using Django's json_script -->
+{{ orders_by_month|json_script:"orders-data" }}
+{{ revenue_by_month|json_script:"revenue-data" }}
+{{ inventory_stock|json_script:"stock-data" }}
+{{ top_customers|json_script:"customers-data" }}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Parse JSON data safely from script tags
+const ordersData = JSON.parse(document.getElementById('orders-data').textContent);
+const revenueData = JSON.parse(document.getElementById('revenue-data').textContent);
+const stockData = JSON.parse(document.getElementById('stock-data').textContent);
+const customersData = JSON.parse(document.getElementById('customers-data').textContent);
+
+const ordersLabels = ordersData.map(x => x.month ? x.month.substring(0, 7) : 'Unknown');
+const ordersCounts = ordersData.map(x => x.count);
+const revenueLabels = revenueData.map(x => x.month ? x.month.substring(0, 7) : 'Unknown');
+const revenueTotals = revenueData.map(x => x.total);
+const stockLabels = stockData.map(x => x.item_name);
+const stockCounts = stockData.map(x => x.stock);
+const customerLabels = customersData.map(x => x.name);
+const customerCounts = customersData.map(x => x.order_count);
+
+new Chart(document.getElementById('ordersChart'), {
+  type: 'bar',
+  data: { labels: ordersLabels, datasets: [{ label: 'Orders', data: ordersCounts, backgroundColor: '#007bff' }] }
+});
+new Chart(document.getElementById('revenueChart'), {
+  type: 'bar',
+  data: { labels: revenueLabels, datasets: [{ label: 'Revenue', data: revenueTotals, backgroundColor: '#28a745' }] }
+});
+new Chart(document.getElementById('stockChart'), {
+  type: 'bar',
+  data: { labels: stockLabels, datasets: [{ label: 'Stock', data: stockCounts, backgroundColor: '#ffc107' }] }
+});
+new Chart(document.getElementById('customersChart'), {
+  type: 'bar',
+  data: { labels: customerLabels, datasets: [{ label: 'Orders', data: customerCounts, backgroundColor: '#17a2b8' }] }
+});
+</script>
+{% endblock %}

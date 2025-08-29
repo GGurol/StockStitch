@@ -1,0 +1,225 @@
+{% extends "core/base.html" %}
+{% load widget_tweaks %}
+{% block title %}Meeting Mode - StockStitch{% endblock %}
+
+{% block extra_head %}
+<script>
+function addChecklistItem(listId, inputName) {
+    const list = document.getElementById(listId);
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.name = inputName;
+    input.className = 'checklist-input';
+    input.style = 'margin-bottom:4px;';
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.innerText = 'Remove';
+    removeBtn.onclick = function() { list.removeChild(div); updateStepCount(listId); };
+    const div = document.createElement('div');
+    div.appendChild(input);
+    div.appendChild(removeBtn);
+    list.appendChild(div);
+    input.addEventListener('input', function() { updateStepCount(listId); });
+    updateStepCount(listId);
+}
+function gatherChecklist(listId, textareaId) {
+    const list = document.getElementById(listId);
+    const textarea = document.getElementById(textareaId);
+    const values = Array.from(list.querySelectorAll('input')).map(i => i.value).filter(v => v.trim() !== '');
+    textarea.value = values.join('\n');
+    updateStepCount(listId);
+}
+function setupChecklist(listId, textareaId, inputName) {
+    const textarea = document.getElementById(textareaId);
+    const list = document.getElementById(listId);
+    if (textarea && textarea.value) {
+        textarea.value.split('\n').forEach(val => {
+            if (val.trim() !== '') {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.name = inputName;
+                input.value = val;
+                input.className = 'checklist-input';
+                input.style = 'margin-bottom:4px;';
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.innerText = 'Remove';
+                removeBtn.onclick = function() { list.removeChild(div); updateStepCount(listId); };
+                const div = document.createElement('div');
+                div.appendChild(input);
+                div.appendChild(removeBtn);
+                list.appendChild(div);
+                input.addEventListener('input', function() { updateStepCount(listId); });
+            }
+        });
+    }
+    if (textarea) textarea.style.display = 'none';
+    updateStepCount(listId);
+}
+function updateStepCount(listId) {
+    const list = document.getElementById(listId);
+    const countSpan = document.getElementById(listId + '_count');
+    if (list && countSpan) {
+        const count = Array.from(list.querySelectorAll('input')).filter(i => i.value.trim() !== '').length;
+        countSpan.textContent = '(' + count + ')';
+    }
+}
+document.addEventListener('DOMContentLoaded', function() {
+    setupChecklist('steps_done_list', 'id_requirement-steps_done', 'requirement-steps_done');
+    setupChecklist('steps_not_done_list', 'id_requirement-steps_not_done', 'requirement-steps_not_done');
+    document.querySelector('form').addEventListener('submit', function() {
+        gatherChecklist('steps_done_list', 'id_requirement-steps_done');
+        gatherChecklist('steps_not_done_list', 'id_requirement-steps_not_done');
+    });
+    // Also update count if user types directly in textarea (shouldn't happen, but for robustness)
+    const stepsDoneTextarea = document.getElementById('id_requirement-steps_done');
+    const stepsNotDoneTextarea = document.getElementById('id_requirement-steps_not_done');
+    if (stepsDoneTextarea) {
+        stepsDoneTextarea.addEventListener('input', function() {
+            updateStepCount('steps_done_list');
+        });
+    }
+    if (stepsNotDoneTextarea) {
+        stepsNotDoneTextarea.addEventListener('input', function() {
+            updateStepCount('steps_not_done_list');
+        });
+    }
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Meeting Mode: Quick Entry</h1>
+
+<form method="post" enctype="multipart/form-data" class="row g-4">
+    {% csrf_token %}
+
+    {% if customer_form.errors or order_form.errors or requirement_form.errors or payment_form.errors %}
+      <div class="alert alert-danger">
+        <ul class="mb-0">
+          {% for form in all_forms %}
+            {% for field in form %}
+              {% for error in field.errors %}
+                <li>{{ field.label }}: {{ error }}</li>
+              {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    <!-- Customer Details -->
+    <div class="col-12 col-lg-6">
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header">Customer Details</div>
+        <div class="card-body">
+          {% for field in customer_form %}
+            <div class="form-group mb-3">
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {{ field|add_class:"form-control" }}
+              {% if field.help_text %}<small class="form-text text-muted">{{ field.help_text }}</small>{% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Details -->
+    <div class="col-12 col-lg-6">
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header">Order Details</div>
+        <div class="card-body">
+          {% for field in order_form %}
+            <div class="form-group mb-3">
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+              {% if field.name == 'measurements' %}
+                {{ field|add_class:"form-control" }}
+              {% elif field.field.widget.input_type == 'select' %}
+                {{ field|add_class:'form-select' }}
+              {% elif field.field.widget.input_type == 'file' %}
+                {{ field|add_class:'form-control' }}
+              {% else %}
+                {{ field|add_class:'form-control' }}
+              {% endif %}
+
+              {% if field.help_text %}<small class="form-text text-muted">{{ field.help_text }}</small>{% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Requirement Details -->
+    <div class="col-12 col-lg-6">
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header">Requirement Details</div>
+        <div class="card-body">
+          {% for field in requirement_form %}
+            <div class="form-group mb-3">
+              {% if field.name == 'is_fulfilled' %}
+                <div class="form-check">
+                  {{ field|add_class:"form-check-input" }}
+                  <label for="{{ field.id_for_label }}" class="form-check-label">{{ field.label }}</label>
+                </div>
+              {% elif field.name == 'steps_done' %}
+                <label for="id_requirement-steps_done">Steps done <span id="steps_done_list_count">(0)</span></label>
+                <div id="steps_done_list"></div>
+                {{ field|add_class:'form-control' }}
+                {% if field.help_text %}<small class="form-text text-muted">{{ field.help_text }}</small>{% endif %}
+              {% elif field.name == 'steps_not_done' %}
+                <label for="id_requirement-steps_not_done">Steps not done <span id="steps_not_done_list_count">(0)</span></label>
+                <div id="steps_not_done_list"></div>
+                {{ field|add_class:'form-control' }}
+                {% if field.help_text %}<small class="form-text text-muted">{{ field.help_text }}</small>{% endif %}
+              {% elif field.name == 'order' %}
+                {{ field|add_class:'form-select' }}
+              {% elif field.field.widget.input_type == 'file' %}
+                {{ field|add_class:'form-control' }}
+              {% else %}
+                {{ field|add_class:'form-control' }}
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Details -->
+    <div class="col-12 col-lg-6">
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header">Payment Details</div>
+        <div class="card-body">
+          {% for field in payment_form %}
+            <div class="form-group mb-3">
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+              {% if field.name == 'order' %}
+                {{ field|add_class:'form-select' }}
+              {% elif field.field.widget.input_type == 'file' %}
+                {{ field|add_class:'form-control' }}
+              {% else %}
+                {{ field|add_class:'form-control' }}
+              {% endif %}
+
+              {% if field.help_text %}<small class="form-text text-muted">{{ field.help_text }}</small>{% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="col-12 d-flex justify-content-end">
+      <button type="submit" class="btn btn-primary btn-lg">Submit All</button>
+    </div>
+</form>
+
+{% if success %}
+    <div class="alert alert-success mt-4">Entry added successfully!</div>
+{% endif %}
+
+{% endblock %}

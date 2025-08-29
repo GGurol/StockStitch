@@ -1,0 +1,43 @@
+{% extends "core/base.html" %}
+{% load widget_tweaks %}
+{% block title %}Edit Inventory Item - StockStitch{% endblock %}
+{% block content %}
+<div class="card shadow-sm mx-auto" style="max-width: 700px;">
+  <div class="card-header bg-primary text-white">Edit Inventory Item</div>
+  <div class="card-body">
+    <a class="btn btn-sm btn-outline-secondary mb-3" href="/inventory/">&larr; Back to Inventory</a>
+    <form method="post" enctype="multipart/form-data" class="row g-3">
+      {% csrf_token %}
+      {% if form.errors %}
+        <div class="alert alert-danger">
+          <ul class="mb-0">
+            {% for field in form %}
+              {% for error in field.errors %}
+                <li>{{ field.label }}: {{ error }}</li>
+              {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      <div class="col-md-4">{{ form.item_name.label_tag }} {{ form.item_name|add_class:'form-control' }}</div>
+      <div class="col-md-4">{{ form.item_type.label_tag }} {{ form.item_type|add_class:'form-select' }}</div>
+      <div class="col-md-4">{{ form.fabric_type.label_tag }} {{ form.fabric_type|add_class:'form-control' }}</div>
+      <div class="col-md-4">{{ form.cost_per_meter.label_tag }} {{ form.cost_per_meter|add_class:'form-control' }}</div>
+      <div class="col-md-4">{{ form.total_meters.label_tag }} {{ form.total_meters|add_class:'form-control' }}</div>
+      <div class="col-md-4">{{ form.taxes.label_tag }} {{ form.taxes|add_class:'form-control' }}</div>
+      <div class="col-md-4">{{ form.size.label_tag }} {{ form.size|add_class:'form-control' }}</div>
+      <div class="col-md-4">{{ form.color.label_tag }} {{ form.color|add_class:'form-control' }}</div>
+      <div class="col-md-4">{{ form.is_printed.label_tag }} {{ form.is_printed|add_class:'form-check-input' }}</div>
+      <div class="col-md-4">{{ form.stock_quantity.label_tag }} {{ form.stock_quantity|add_class:'form-control' }}</div>
+      <div class="col-md-4">{{ form.supplier.label_tag }} {{ form.supplier|add_class:'form-control' }}</div>
+      <div class="col-md-4">{{ form.image.label_tag }} {{ form.image|add_class:'form-control' }}</div>
+      <div class="col-12 d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %} 

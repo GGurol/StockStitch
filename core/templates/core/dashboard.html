@@ -1,0 +1,28 @@
+{% extends "core/base.html" %}
+{% block title %}Dashboard - StockStitch{% endblock %}
+{% block content %}
+<h1>Business Dashboard</h1>
+<ul>
+    <li><strong>Total Customers:</strong> {{ total_customers }}</li>
+    <li><strong>Total Orders:</strong> {{ total_orders }}</li>
+    <li><strong>Pending Orders:</strong> {{ pending_orders }}</li>
+    <li><strong>Total Inventory Items:</strong> {{ total_inventory }}</li>
+    <li><strong>Total Payments:</strong> {{ total_payments }}</li>
+    <li><strong>Outstanding Payments:</strong> {{ outstanding_payments }}</li>
+</ul>
+<h2>Low Stock Inventory (≤ 5 units)</h2>
+<table>
+    <tr>
+        <th>Item Name</th>
+        <th>Stock Quantity</th>
+    </tr>
+    {% for item in low_stock_items %}
+    <tr>
+        <td>{{ item.item_name }}</td>
+        <td>{{ item.stock_quantity }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="2">No low stock items.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %} 

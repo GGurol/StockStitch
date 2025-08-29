@@ -1,0 +1,17 @@
+{% extends "core/base.html" %}
+{% block title %}Notifications{% endblock %}
+{% block content %}
+<h1 class="mb-4">Notifications</h1>
+<ul class="list-group">
+  {% for n in notifications %}
+    <li class="list-group-item{% if not n.is_read %} list-group-item-info{% endif %}">
+      {{ n.message }}
+      {% if n.url %}<a href="{{ n.url }}">View</a>{% endif %}
+      <span class="text-muted float-end">{{ n.created_at }}</span>
+      {% if not n.is_read %}<a href="{% url 'mark_notification_read' n.pk %}" class="btn btn-sm btn-success ms-2">Mark as read</a>{% endif %}
+    </li>
+  {% empty %}
+    <li class="list-group-item">No notifications.</li>
+  {% endfor %}
+</ul>
+{% endblock %} 

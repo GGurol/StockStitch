@@ -1,0 +1,15 @@
+# docker-compose.yml
+services:
+  web:
+    # Build the image from the Dockerfile in the current directory
+    build: .
+    # Name the container for easy identification
+    container_name: stock_management_app
+    # The command to run when the container starts for development
+    command: python manage.py runserver 0.0.0.0:8000
+    # Mount the current directory into the container's /app directory for live code changes
+    volumes:
+      - .:/app
+    # Map port 8000 on the host to port 8000 in the container
+    ports:
+      - "8000:8000"

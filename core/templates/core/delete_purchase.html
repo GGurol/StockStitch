@@ -1,0 +1,11 @@
+{% extends "core/base.html" %}
+{% block title %}Delete Purchase - StockStitch{% endblock %}
+{% block content %}
+<h1 class="mb-4">Delete Purchase</h1>
+<p>Are you sure you want to delete this purchase?</p>
+<form method="post">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-danger">Delete</button>
+  <a href="{% url 'purchases' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %} 

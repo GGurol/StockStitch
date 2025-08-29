@@ -1,0 +1,15 @@
+{% extends "core/base.html" %}
+{% block title %}Delete Payment - StockStitch{% endblock %}
+{% block content %}
+<div class="card shadow-sm mx-auto mt-5" style="max-width: 500px;">
+  <div class="card-header bg-danger text-white">Delete Payment</div>
+  <div class="card-body">
+    <p class="mb-4">Are you sure you want to delete this payment?</p>
+    <form method="post" class="d-flex gap-2">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Yes, Delete</button>
+      <a class="btn btn-outline-secondary" href="/payments/">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %} 

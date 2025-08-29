@@ -1,0 +1,39 @@
+{% extends "core/base.html" %}
+{% load widget_tweaks %}
+{% block title %}Edit Order - StockStitch{% endblock %}
+{% block content %}
+<div class="card shadow-sm mx-auto" style="max-width: 700px;">
+  <div class="card-header bg-primary text-white">Edit Order</div>
+  <div class="card-body">
+    <a class="btn btn-sm btn-outline-secondary mb-3" href="/orders/">&larr; Back to Orders</a>
+    <form method="post" enctype="multipart/form-data" class="row g-3">
+      {% csrf_token %}
+      {% if form.errors %}
+        <div class="alert alert-danger">
+          <ul class="mb-0">
+            {% for field in form %}
+              {% for error in field.errors %}
+                <li>{{ field.label }}: {{ error }}</li>
+              {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      <div class="col-md-4">{{ form.customer.label_tag }} {{ form.customer|add_class:'form-select' }}</div>
+      <div class="col-md-4">{{ form.inventory_item.label_tag }} {{ form.inventory_item|add_class:'form-select' }}</div>
+      <div class="col-md-4">{{ form.product_type.label_tag }} {{ form.product_type|add_class:'form-select' }}</div>
+      <div class="col-md-4">{{ form.measurements.label_tag }} {{ form.measurements|add_class:'form-control' }}</div>
+      <div class="col-md-4">{{ form.status.label_tag }} {{ form.status|add_class:'form-control' }}</div>
+      <div class="col-md-4">{{ form.notes.label_tag }} {{ form.notes|add_class:'form-control' }}</div>
+      <div class="col-md-4">{{ form.delivery_date.label_tag }} {{ form.delivery_date|add_class:'form-control' }}</div>
+      <div class="col-md-4">{{ form.image.label_tag }} {{ form.image|add_class:'form-control' }}</div>
+      <div class="col-12 d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %} 

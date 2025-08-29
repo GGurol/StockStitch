@@ -1,0 +1,351 @@
+// Premium Modern SaaS Dashboard SCSS
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+$primary: #2563eb;
+$secondary: #7c3aed;
+$accent: #fbbf24;
+$danger: #ef4444;
+$success: #22c55e;
+$body-bg: #f4f6fb;
+$body-bg-dark: #181a20;
+$card-bg: rgba(255,255,255,0.85);
+$card-bg-dark: rgba(30,32,40,0.85);
+$border-radius: 1.25rem;
+$shadow: 0 8px 32px rgba(30,41,59,0.13);
+$shadow-dark: 0 8px 32px rgba(0,0,0,0.35);
+$transition: all 0.22s cubic-bezier(.4,0,.2,1);
+$navbar-blur: blur(12px);
+
+body {
+  background: linear-gradient(135deg, #f4f6fb 0%, #e0e7ff 100%);
+  font-family: 'Inter', Arial, sans-serif;
+  color: #181a20;
+  font-size: 1.08rem;
+  letter-spacing: 0.01em;
+  min-height: 100vh;
+  transition: $transition;
+}
+
+.dark-mode body {
+  background: linear-gradient(135deg, #181a20 0%, #23263a 100%);
+  color: #f3f4f6;
+}
+
+.card {
+  border-radius: $border-radius;
+  box-shadow: $shadow;
+  background: $card-bg;
+  border: none;
+  margin-bottom: 2.5rem;
+  transition: $transition;
+  backdrop-filter: blur(8px) saturate(1.2);
+  border: 1.5px solid rgba(37,99,235,0.07);
+  padding: 2rem 2.2rem 1.5rem 2.2rem;
+  position: relative;
+  overflow: hidden;
+}
+.dark-mode .card {
+  background: $card-bg-dark;
+  box-shadow: $shadow-dark;
+  border: 1.5px solid rgba(124,58,237,0.12);
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: -40%; left: -40%;
+  width: 180%; height: 180%;
+  background: radial-gradient(circle at 60% 40%, rgba(124,58,237,0.08) 0%, transparent 70%);
+  z-index: 0;
+}
+.card-header {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  background: linear-gradient(90deg, $primary 0%, $secondary 100%);
+  color: #fff;
+  border-radius: $border-radius $border-radius 0 0;
+  padding: 1.2rem 2rem;
+  margin: -2rem -2.2rem 2rem -2.2rem;
+  box-shadow: 0 2px 12px rgba(37,99,235,0.08);
+  font-size: 1.18rem;
+  position: relative;
+  z-index: 1;
+}
+
+.table {
+  border-radius: $border-radius;
+  overflow: hidden;
+  background: rgba(255,255,255,0.95);
+  box-shadow: $shadow;
+  margin-bottom: 2.5rem;
+  font-size: 1.04rem;
+}
+.dark-mode .table {
+  background: rgba(30,32,40,0.95);
+  color: #f3f4f6;
+}
+.table th, .table td {
+  vertical-align: middle;
+  padding: 1.15rem 1.5rem;
+  border: none;
+}
+.table thead th {
+  background: #f1f5f9;
+  font-weight: 700;
+  color: $primary;
+  border-bottom: 2px solid #e5e7eb;
+  font-size: 1.07rem;
+}
+.dark-mode .table thead th {
+  background: #23263a;
+  color: $secondary;
+  border-bottom: 2px solid #23263a;
+}
+
+.btn, .btn-primary, .btn-outline-primary, .btn-outline-danger, .btn-success {
+  border-radius: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  transition: $transition;
+  box-shadow: 0 2px 12px rgba(30,41,59,0.09);
+  padding: 0.7rem 1.5rem;
+  font-size: 1.07rem;
+}
+.btn-primary {
+  background: linear-gradient(90deg, $primary 0%, $secondary 100%);
+  border: none;
+  color: #fff;
+  &:hover, &:focus {
+    background: linear-gradient(90deg, $secondary 0%, $primary 100%);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(37,99,235,0.13);
+    transform: translateY(-2px) scale(1.03);
+  }
+}
+.btn-outline-primary {
+  color: $primary;
+  border: 2px solid $primary;
+  background: transparent;
+  &:hover, &:focus {
+    background: $primary;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(37,99,235,0.13);
+    transform: translateY(-2px) scale(1.03);
+  }
+}
+.btn-outline-danger {
+  color: $danger;
+  border: 2px solid $danger;
+  background: transparent;
+  &:hover, &:focus {
+    background: $danger;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(239,68,68,0.13);
+    transform: translateY(-2px) scale(1.03);
+  }
+}
+.btn-success {
+  background: $success;
+  border: none;
+  color: #fff;
+  &:hover, &:focus {
+    background: darken($success, 10%);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(34,197,94,0.13);
+    transform: translateY(-2px) scale(1.03);
+  }
+}
+input.form-control, select.form-select, textarea.form-control {
+  border-radius: $border-radius;
+  border: 1.5px solid #e5e7eb;
+  box-shadow: none;
+  background: rgba(249,250,251,0.97);
+  padding: 1.1rem 1.3rem;
+  transition: $transition;
+  font-size: 1.09rem;
+  color: #181a20;
+  min-height: 3.1rem;
+  margin-bottom: 1.2rem;
+  outline: none;
+  &::placeholder {
+    color: #b6bbc7;
+    opacity: 1;
+    font-size: 1.04rem;
+    letter-spacing: 0.01em;
+  }
+  &:focus {
+    border-color: $primary;
+    box-shadow: 0 0 0 0.19rem rgba(37,99,235,0.13);
+    background: #fff;
+    color: #181a20;
+  }
+  &:disabled, &[readonly] {
+    background: #f1f5f9;
+    color: #b6bbc7;
+    border-color: #e5e7eb;
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+.dark-mode input.form-control, .dark-mode select.form-select, .dark-mode textarea.form-control {
+  background: #23263a;
+  color: #f3f4f6;
+  border: 1.5px solid #23263a;
+  &::placeholder {
+    color: #7c8499;
+  }
+  &:focus {
+    background: #23263a;
+    color: #fff;
+    border-color: $secondary;
+  }
+}
+select.form-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%232563eb" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7.293 7.293a1 1 0 011.414 0L10 8.586l1.293-1.293a1 1 0 111.414 1.414l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 010-1.414z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 1.2rem center;
+  background-size: 1.2rem;
+  padding-right: 2.5rem;
+}
+textarea.form-control {
+  min-height: 6.5rem;
+  resize: vertical;
+  font-size: 1.09rem;
+  line-height: 1.6;
+}
+.form-label, label {
+  font-weight: 600;
+  color: $primary;
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.01em;
+  font-size: 1.04rem;
+}
+.form-group {
+  margin-bottom: 1.7rem;
+}
+// Error state
+input.form-control.is-invalid, select.form-select.is-invalid, textarea.form-control.is-invalid {
+  border-color: $danger;
+  background: #fff0f0;
+  color: $danger;
+}
+input.form-control.is-invalid:focus, select.form-select.is-invalid:focus, textarea.form-control.is-invalid:focus {
+  border-color: darken($danger, 10%);
+  box-shadow: 0 0 0 0.19rem rgba(239,68,68,0.13);
+}
+// Floating label support (optional)
+.form-floating > .form-control, .form-floating > .form-select {
+  height: calc(3.5rem + 2px);
+  line-height: 1.25;
+  padding: 1.2rem 1.3rem 0.5rem 1.3rem;
+}
+.form-floating > label {
+  position: absolute;
+  top: 0.8rem;
+  left: 1.3rem;
+  font-size: 1.02rem;
+  color: #b6bbc7;
+  pointer-events: none;
+  transition: $transition;
+}
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label,
+.form-floating > .form-select:focus ~ label,
+.form-floating > .form-select:not([value=""]) ~ label {
+  top: 0.2rem;
+  left: 1.1rem;
+  font-size: 0.93rem;
+  color: $primary;
+  font-weight: 600;
+}
+
+.navbar {
+  border-radius: 0 0 $border-radius $border-radius;
+  background: rgba(255,255,255,0.85);
+  box-shadow: $shadow;
+  padding: 1.1rem 2.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: $navbar-blur;
+  transition: $transition;
+}
+.dark-mode .navbar {
+  background: rgba(30,32,40,0.85);
+  box-shadow: $shadow-dark;
+}
+.navbar .navbar-nav .nav-link {
+  color: $primary !important;
+  font-weight: 600;
+  margin-right: 1.2rem;
+  transition: $transition;
+  font-size: 1.08rem;
+  &:hover, &:focus {
+    color: $secondary !important;
+    text-shadow: 0 2px 8px rgba(124,58,237,0.13);
+  }
+}
+.dark-mode .navbar .navbar-nav .nav-link {
+  color: $accent !important;
+}
+
+.alert {
+  border-radius: $border-radius;
+  font-weight: 600;
+  font-size: 1.08rem;
+  padding: 1.2rem 2rem;
+  box-shadow: 0 2px 12px rgba(239,68,68,0.09);
+  background: linear-gradient(90deg, #fffbe6 0%, #f4f6fb 100%);
+  border: none;
+}
+.dark-mode .alert {
+  background: linear-gradient(90deg, #23263a 0%, #181a20 100%);
+  color: #fbbf24;
+}
+::-webkit-scrollbar {
+  width: 12px;
+  background: #e5e7eb;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, $primary 0%, $secondary 100%);
+  border-radius: $border-radius;
+}
+
+// Glassmorphism hover for cards
+.card:hover {
+  box-shadow: 0 16px 48px rgba(30,41,59,0.18);
+  transform: translateY(-4px) scale(1.015);
+  border: 1.5px solid $secondary;
+  background: rgba(255,255,255,0.93);
+}
+.dark-mode .card:hover {
+  box-shadow: 0 16px 48px rgba(124,58,237,0.18);
+  border: 1.5px solid $accent;
+  background: rgba(30,32,40,0.93);
+}
+
+// Dark mode toggle button (optional)
+.dark-toggle {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: $primary;
+  color: #fff;
+  border-radius: 50%;
+  width: 3.2rem;
+  height: 3.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: $shadow;
+  cursor: pointer;
+  font-size: 1.5rem;
+  z-index: 200;
+  transition: $transition;
+  border: none;
+}
+.dark-toggle:hover {
+  background: $secondary;
+} 

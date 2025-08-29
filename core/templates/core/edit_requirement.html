@@ -1,0 +1,112 @@
+{% extends "core/base.html" %}
+{% load widget_tweaks %}
+{% block title %}Edit Requirement - StockStitch{% endblock %}
+{% block extra_head %}{{ block.super }}
+<script>
+function addChecklistItem(listId, inputName) {
+    const list = document.getElementById(listId);
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.name = inputName;
+    input.className = 'checklist-input';
+    input.style = 'margin-bottom:4px;';
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.innerText = 'Remove';
+    removeBtn.onclick = function() { list.removeChild(div); };
+    const div = document.createElement('div');
+    div.appendChild(input);
+    div.appendChild(removeBtn);
+    list.appendChild(div);
+}
+function gatherChecklist(listId, textareaId) {
+    const list = document.getElementById(listId);
+    const textarea = document.getElementById(textareaId);
+    const values = Array.from(list.querySelectorAll('input')).map(i => i.value).filter(v => v.trim() !== '');
+    textarea.value = values.join('\n');
+}
+function setupChecklist(listId, textareaId, inputName) {
+    const textarea = document.getElementById(textareaId);
+    const list = document.getElementById(listId);
+    if (textarea.value) {
+        textarea.value.split('\n').forEach(val => {
+            if (val.trim() !== '') {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.name = inputName;
+                input.value = val;
+                input.className = 'checklist-input';
+                input.style = 'margin-bottom:4px;';
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.innerText = 'Remove';
+                removeBtn.onclick = function() { list.removeChild(div); };
+                const div = document.createElement('div');
+                div.appendChild(input);
+                div.appendChild(removeBtn);
+                list.appendChild(div);
+            }
+        });
+    }
+    textarea.style.display = 'none';
+}
+document.addEventListener('DOMContentLoaded', function() {
+    setupChecklist('steps_done_list', 'id_steps_done', 'steps_done');
+    setupChecklist('steps_not_done_list', 'id_steps_not_done', 'steps_not_done');
+    document.querySelector('form').addEventListener('submit', function() {
+        gatherChecklist('steps_done_list', 'id_steps_done');
+        gatherChecklist('steps_not_done_list', 'id_steps_not_done');
+    });
+});
+</script>
+{% endblock %}
+{% block content %}
+<div class="card shadow-sm mx-auto" style="max-width: 700px;">
+  <div class="card-header bg-primary text-white">Edit Requirement</div>
+  <div class="card-body">
+    <a class="btn btn-sm btn-outline-secondary mb-3" href="/requirements/">&larr; Back to Requirements</a>
+    <form method="post" enctype="multipart/form-data" class="row g-3">
+      {% csrf_token %}
+      {% if form.errors %}
+        <div class="alert alert-danger">
+          <ul class="mb-0">
+            {% for field in form %}
+              {% for error in field.errors %}
+                <li>{{ field.label }}: {{ error }}</li>
+              {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      <div class="col-md-6">{{ form.order.label_tag }} {{ form.order|add_class:'form-select' }}</div>
+      <div class="col-md-6">{{ form.description.label_tag }} {{ form.description|add_class:'form-control' }}</div>
+      <div class="col-md-6">{{ form.is_fulfilled.label_tag }} {{ form.is_fulfilled|add_class:'form-check-input' }}</div>
+      <div class="col-md-6">
+        <label>Steps Done</label>
+        <div id="steps_done_list"></div>
+        <button type="button" class="btn btn-sm btn-outline-secondary mb-2" onclick="addChecklistItem('steps_done_list', 'steps_done')">Add Step</button>
+        {{ form.steps_done|add_class:'form-control' }}
+      </div>
+      <div class="col-md-6">
+        <label>Steps Not Done</label>
+        <div id="steps_not_done_list"></div>
+        <button type="button" class="btn btn-sm btn-outline-secondary mb-2" onclick="addChecklistItem('steps_not_done_list', 'steps_not_done')">Add Step</button>
+        {{ form.steps_not_done|add_class:'form-control' }}
+      </div>
+      <div class="col-md-6">{{ form.attachment.label_tag }} {{ form.attachment|add_class:'form-control' }}</div>
+      <div class="col-md-6">{{ form.notes.label_tag }} {{ form.notes|add_class:'form-control' }}</div>
+      {% if requirement.attachment %}
+        <div class="col-12 mb-2">
+          <p>Current Attachment: <a href="{{ requirement.attachment.url }}" target="_blank">Download</a></p>
+        </div>
+      {% endif %}
+      <div class="col-12 d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %} 
