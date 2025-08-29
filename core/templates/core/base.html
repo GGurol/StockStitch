@@ -31,23 +31,15 @@
                 <ul class="navbar-nav">
                     {% if user.is_authenticated %}
                         <li class="nav-item"><span class="navbar-text">Welcome, {{ user.username }}!</span></li>
-<<<<<<< HEAD
                         <li class="nav-item">
                             
                                 <form action="{% url 'logout' %}" method="post" style="display: inline;">
                                     {% csrf_token %}
                                     <button class="nav-link" type="submit">Logout</button>
-                                </form>
-                            
-                            
-                            
-                            
+                                </form
                             
                             <!--<a class="nav-link" href="/accounts/logout/">Logout</a>-->
                         </li>
-=======
-                        <li class="nav-item"><a class="nav-link" href="/accounts/logout/">Logout</a></li>
->>>>>>> c423afddd282a4f6806259664fced3dc995bee88
                     {% else %}
                         <li class="nav-item"><a class="nav-link" href="/accounts/login/">Login</a></li>
                         <li class="nav-item"><a class="nav-link" href="/register/">Register</a></li>
