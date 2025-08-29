@@ -15,10 +15,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-<<<<<<< HEAD
 LOGOUT_REDIRECT_URL = '/'
-=======
->>>>>>> c423afddd282a4f6806259664fced3dc995bee88
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -29,12 +26,7 @@ SECRET_KEY = 'django-insecure-r8k6p65&rr=%g7ccj-)oeqh1=&gna(r*p920n3n=^2o2_(+&=r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-<<<<<<< HEAD
 ALLOWED_HOSTS = ["*"]
-=======
-ALLOWED_HOSTS = []
->>>>>>> c423afddd282a4f6806259664fced3dc995bee88
-
 
 # Application definition
 
